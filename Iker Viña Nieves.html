@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iker Viña Nieves — Blog Personal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #1a1209;
+      --paper: #f5efe3;
+      --cream: #ede5d0;
+      --accent: #c0392b;
+      --accent2: #d4874d;
+      --muted: #7a6e5f;
+      --border: #c9bfae;
+      --shadow: rgba(26,18,9,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      padding: 70px 40px 50px;
+      border-bottom: 2px solid var(--ink);
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 340px; height: 100%;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 8px,
+        rgba(192,57,43,0.06) 8px,
+        rgba(192,57,43,0.06) 9px
+      );
+      pointer-events: none;
+    }
+
+    .header-tag {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(46px, 7vw, 88px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      position: relative;
+      z-index: 1;
+    }
+
+    header h1 span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .header-sub {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 480px;
+      font-style: italic;
+    }
+
+    .header-decorline {
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      margin-top: 24px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--ink);
+      padding: 0 40px;
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--accent);
+      overflow-x: auto;
+    }
+
+    nav a {
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px 22px;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+
+    nav a:hover { background: var(--accent); color: #fff; }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 0;
+      align-items: start;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      padding: 60px 50px 60px 0;
+      border-right: 1px solid var(--border);
+    }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── FEATURED POST (HERO) ── */
+    .post-hero {
+      margin-bottom: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .post-meta {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .post-meta .cat {
+      background: var(--accent);
+      color: #fff;
+      padding: 2px 10px;
+      font-size: 10px;
+    }
+
+    .post-hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 18px;
+      color: var(--ink);
+    }
+
+    .post-hero h2 em {
+      color: var(--accent2);
+      font-style: italic;
+    }
+
+    .post-hero p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+      max-width: 620px;
+      margin-bottom: 20px;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+      transition: gap 0.2s;
+    }
+
+    .read-more:hover { gap: 16px; }
+
+    /* ── REGULAR POSTS ── */
+    .post-list { display: flex; flex-direction: column; gap: 36px; }
+
+    .post-card {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      padding-bottom: 36px;
+      border-bottom: 1px dashed var(--border);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .post-card:last-child { border-bottom: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .post-card:nth-child(1) { animation-delay: 0.05s; }
+    .post-card:nth-child(2) { animation-delay: 0.15s; }
+    .post-card:nth-child(3) { animation-delay: 0.25s; }
+    .post-card:nth-child(4) { animation-delay: 0.35s; }
+
+    .post-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1;
+      text-align: center;
+      padding-top: 4px;
+      -webkit-text-stroke: 1px var(--border);
+    }
+
+    .post-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .post-card p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      padding: 60px 0 60px 40px;
+    }
+
+    .widget {
+      margin-bottom: 50px;
+    }
+
+    /* Profile card */
+    .profile-card {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.15;
+    }
+
+    .profile-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 900;
+      color: #fff;
+      margin-bottom: 18px;
+      position: relative; z-index: 1;
+    }
+
+    .profile-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .profile-card p {
+      font-size: 12px;
+      color: rgba(245,239,227,0.65);
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin-top: 24px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .stat {
+      background: var(--ink);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--accent2);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,239,227,0.5);
+    }
+
+    /* Timeline widget */
+    .timeline { list-style: none; position: relative; padding-left: 20px; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px; top: 6px; bottom: 6px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline li {
+      position: relative;
+      margin-bottom: 22px;
+      padding-left: 18px;
+      font-size: 12px;
+    }
+
+    .timeline li::before {
+      content: '';
+      position: absolute;
+      left: -17px; top: 5px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--paper);
+    }
+
+    .timeline .tl-year {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .timeline .tl-text {
+      color: var(--ink);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* Tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag:hover { border-color: var(--accent); color: var(--accent); }
+    .tag.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* Quote block */
+    .pull-quote {
+      border-left: 4px solid var(--accent);
+      padding: 20px 24px;
+      background: var(--cream);
+      margin: 40px 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .pull-quote cite {
+      display: block;
+      margin-top: 10px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-style: normal;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(245,239,227,0.5);
+      text-align: center;
+      padding: 36px 40px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-top: 3px solid var(--accent);
+    }
+
+    footer strong { color: var(--accent2); }
+
+    /* ── DECORATIVE DIVIDER ── */
+    .ornament {
+      text-align: center;
+      color: var(--accent);
+      font-size: 18px;
+      letter-spacing: 0.5em;
+      margin: 30px 0;
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      main { border-right: none; padding-right: 0; }
+      aside { padding-left: 0; border-top: 1px solid var(--border); }
+      header { padding: 50px 24px 40px; }
+      nav { padding: 0 24px; }
+      .container { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <p class="header-tag">✦ Blog personal — Andorra</p>
+      <h1>Iker <span>Viña</span><br/>Nieves</h1>
+      <p class="header-sub">Deportista, superviviente, cosplayer. Una vida que no sigue ningún guion.</p>
+      <div class="header-decorline"></div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container" style="display:flex; padding:0;">
+      <a href="#">Inicio</a>
+      <a href="#">Voleibol</a>
+      <a href="#">Cosplay</a>
+      <a href="#">Reflexiones</a>
+      <a href="#">Sobre mí</a>
+      <a href="#">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- MAIN GRID -->
+  <div class="container">
+    <div class="grid">
+
+      <!-- CONTENT -->
+      <main>
+
+        <!-- FEATURED -->
+        <div class="post-hero">
+          <div class="post-meta">
+            <span class="cat">Destacado</span>
+            <span>Marzo 2024</span>
+          </div>
+          <h2>Del voleibol al cosplay:<br/><em>cómo reconstruí mi vida</em></h2>
+          <p>
+            Hubo un tiempo en que el voleibol lo era todo para mí. Las pistas del Andorra VC, el sonido del balón, el sudor de los entrenamientos. No era famoso, no ganaba títulos internacionales, pero era constante. Era disciplinado. Era yo.
+          </p>
+          <p>
+            Luego vino el caos. Las relaciones que se deshacen, los amigos que te traicionan, las noches en que la mente no encuentra dónde anclar. Y después, inesperadamente, el cosplay. Una obsesión que se convirtió en salvavidas.
+          </p>
+          <a href="#" class="read-more">Seguir leyendo →</a>
+        </div>
+
+        <div class="section-title">Entradas recientes</div>
+
+        <!-- POST LIST -->
+        <div class="post-list">
+
+          <div class="post-card">
+            <div class="post-number">01</div>
+            <div>
+              <div class="post-meta"><span class="cat">Infancia</span><span>Ene 2024</span></div>
+              <h3>El niño que era diferente en el patio</h3>
+              <p>Crecer en Andorra con la sensación de no encajar no es fácil. Las burlas en el colegio dejaron marcas que tardé décadas en entender. Aquí hablo de eso, sin filtros.</p>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-number">02</div>
+            <div>
+              <div class="post-meta"><span class="cat">Voleibol</span><span>Feb 2024</span></div>
+              <h3>Lo que el Andorra VC me enseñó sobre resistir</h3>
+              <p>El deporte fue mi primera terapia. Sin saberlo, cada entrenamiento era una forma de procesar lo que no podía decir con palabras. El voleibol me dio disciplina cuando todo lo demás era ruido.</p>
+            </div>
+          </div>
+
+          <div class="pull-quote">
+            "No llegué a la fama internacional. Pero en cada partido me dejaba la piel. Y eso, a veces, es suficiente."
+            <cite>— Iker Viña Nieves</cite>
+          </div>
+
+          <div class="post-card">
+            <div class="post-number">03</div>
+            <div>
+              <div class="post-meta"><span class="cat">Vida personal</span><span>Feb 2024</span></div>
+              <h3>Sofía, Rubén y la noche que cambió todo</h3>
+              <p>No sé si algún día seré capaz de hablar de esto con total calma. Pero escribirlo ayuda. La traición de las personas que más quieres tiene un sabor que no se olvida.</p>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-number">04</div>
+            <div>
+              <div class="post-meta"><span class="cat">Salud mental</span><span>Mar 2024</span></div>
+              <h3>Lo que nadie te cuenta sobre el internamiento psiquiátrico</h3>
+              <p>Entré roto. Salí diferente. No "curado" —eso es una palabra demasiado grande— pero sí con herramientas. Y con la certeza de que pedir ayuda no es rendirse.</p>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-number">05</div>
+            <div>
+              <div class="post-meta"><span class="cat">Cosplay</span><span>Mar 2024</span></div>
+              <h3>Por qué gané mi primer torneo disfrazado de un personaje de anime</h3>
+              <p>La gente se reía al principio. Luego dejaron de reírse. El cosplay profesional exige una dedicación que pocos entienden: cada detalle, cada costura, cada gesto importa. Y yo sabía de eso.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside>
+
+        <!-- PROFILE -->
+        <div class="widget">
+          <div class="profile-card">
+            <div class="profile-avatar">I</div>
+            <h3>Iker Viña Nieves</h3>
+            <p>Ex jugador del Andorra VC. Superviviente de mis propias tormentas. Cosplayer profesional y amante del anime. Escribo para no olvidar.</p>
+            <div class="profile-stats">
+              <div class="stat">
+                <span class="stat-number">96</span>
+                <span class="stat-label">Años vividos</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Torneos alma</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Relaciones</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">1</span>
+                <span class="stat-label">Vida</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="widget">
+          <div class="section-title">Línea de vida</div>
+          <ul class="timeline">
+            <li>
+              <span class="tl-year">Infancia</span>
+              <span class="tl-text">Nacido en Andorra. Acoso escolar. Las primeras heridas invisibles.</span>
+            </li>
+            <li>
+              <span class="tl-year">Juventud</span>
+              <span class="tl-text">Ingresa al Andorra VC. El voleibol como refugio y disciplina.</span>
+            </li>
+            <li>
+              <span class="tl-year">Primer matrimonio</span>
+              <span class="tl-text">Sofía. Los hijos. La traición de Rubén Freitas. El silencio que sigue.</span>
+            </li>
+            <li>
+              <span class="tl-year">Diana</span>
+              <span class="tl-text">Castell Antic. Intensidad, inestabilidad. El quiebre definitivo.</span>
+            </li>
+            <li>
+              <span class="tl-year">Internamiento</span>
+              <span class="tl-text">Un periodo largo. Tratamiento. Supervisión. Y un póster de anime en la mente.</span>
+            </li>
+            <li>
+              <span class="tl-year">Cosplay</span>
+              <span class="tl-text">Torneos. Reconocimiento. Una identidad nueva construida con tela y voluntad.</span>
+            </li>
+            <li>
+              <span class="tl-year">Últimos años</span>
+              <span class="tl-text">Aislamiento tranquilo. El anime. La memoria. La vida que fue.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- TAGS -->
+        <div class="widget">
+          <div class="section-title">Temas</div>
+          <div class="tags">
+            <span class="tag active">Cosplay</span>
+            <span class="tag">Voleibol</span>
+            <span class="tag">Salud mental</span>
+            <span class="tag">Anime</span>
+            <span class="tag">Andorra</span>
+            <span class="tag">Reflexiones</span>
+            <span class="tag">Relaciones</span>
+            <span class="tag">Resiliencia</span>
+          </div>
+        </div>
+
+        <!-- ORNAMENT -->
+        <div class="ornament">✦ ✦ ✦</div>
+
+        <!-- QUOTE WIDGET -->
+        <div style="background:var(--cream); border:1px solid var(--border); padding:28px;">
+          <div class="section-title" style="margin-bottom:14px;">Frase del momento</div>
+          <p style="font-family:'Playfair Display',serif; font-size:15px; font-style:italic; line-height:1.7; color:var(--ink);">
+            "Cada disfraz que me pongo es una versión de mí que no tuve miedo de mostrar."
+          </p>
+          <p style="font-size:11px; color:var(--muted); margin-top:10px; letter-spacing:0.1em;">— I. V. Nieves</p>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Iker Viña Nieves</strong> · Blog Personal · Andorra<br/>
+    <span style="font-size:10px; margin-top:6px; display:block; letter-spacing:0.08em; text-transform:none; font-style:italic;">Una vida rara es, aun así, una vida plena.</span>
+  </footer>
+
+</body>
+</html>
